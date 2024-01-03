@@ -44,11 +44,39 @@ router.patch('/:id', async (req, res) => {
     const options = { upsert: true };
     const updatedContact = {
         $set: {
-            name: contact.contactName,
+            name: contact.name,
             phone: contact.phone,
             email: contact.email,
             address: contact.address,
             profilePicture: contact.profilePicture,
+           
+        },
+    };
+    const result = await contactCollection.updateOne(filter, updatedContact, options);
+    res.send(result);
+});
+router.patch('/markedFavorite/:id', async (req, res) => {
+    const contactCollection = await connectMongoDB();
+    const id = req.params.id;
+    const filter = { _id: new ObjectId(id) };
+    const options = { upsert: true };
+    const updatedContact = {
+        $set: {
+            isFavorite : true
+           
+        },
+    };
+    const result = await contactCollection.updateOne(filter, updatedContact, options);
+    res.send(result);
+});
+router.patch('/unMarkedFavorite/:id', async (req, res) => {
+    const contactCollection = await connectMongoDB();
+    const id = req.params.id;
+    const filter = { _id: new ObjectId(id) };
+    const options = { upsert: true };
+    const updatedContact = {
+        $set: {
+            isFavorite : false
            
         },
     };
